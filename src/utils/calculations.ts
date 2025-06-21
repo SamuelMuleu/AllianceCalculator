@@ -37,5 +37,7 @@ export const findClosestConquilha = (conquilhaValue: number): number => {
 export const calculateWeight = (baseValue: number, height: number, width: number): number => {
       const sumSide = 0.65 + height;
 
+
   return parseFloat(((baseValue * 3.14 * sumSide  * width) / 1000 * 16.75).toFixed(2));
 };
+
