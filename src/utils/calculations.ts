@@ -6,7 +6,6 @@ export const calculateResults = (measurements: RingMeasurements): CalculationRes
   const { internalCircumference, height, width } = measurements;
   
 
-  
   // Calculate the base value
   
   const baseValue = internalCircumference + 0.65 + height;
@@ -19,6 +18,7 @@ export const calculateResults = (measurements: RingMeasurements): CalculationRes
   
   // Calculate the weight
   const weight = calculateWeight(baseValue, height, width);
+
 
   return {
     baseValue,
@@ -36,5 +36,6 @@ export const findClosestConquilha = (conquilhaValue: number): number => {
 
 export const calculateWeight = (baseValue: number, height: number, width: number): number => {
       const sumSide = 0.65 + height;
-  return parseFloat(((baseValue * 3.14 * sumSide * height * width) / 1000 * 16.75).toFixed(2));
+
+  return parseFloat(((baseValue * 3.14 * sumSide  * width) / 1000 * 16.75).toFixed(2));
 };
