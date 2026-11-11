@@ -9,24 +9,28 @@ export default {
           100: '#FFF2CC',
           200: '#FFE699',
           300: '#FFD966',
-          400: '#FFCC33',
-          500: '#D4AF37', /* Main gold color */
+          400: '#E8C55A',
+          500: '#D4AF37',
           600: '#BF9B30',
           700: '#A67C00',
           800: '#8C6900',
           900: '#735500',
         },
-        blue: {
-          800: '#1E40AF',
-          900: '#1E3A8A',
-        }
+        ink: {
+          50: '#F7F6F3',
+          100: '#E9E7E1',
+          300: '#B9B5AA',
+          400: '#9A958A',
+          500: '#77736A',
+          700: '#3A3833',
+          800: '#26251F',
+          900: '#1A1916',
+          950: '#0F0E0C',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        serif: ['Libre Baskerville', 'Georgia', 'serif'],
-      },
-      boxShadow: {
-        'inner-gold': 'inset 0 2px 4px 0 rgba(212, 175, 55, 0.06)',
+        serif: ['"Libre Baskerville"', 'Georgia', 'serif'],
       },
     },
   },

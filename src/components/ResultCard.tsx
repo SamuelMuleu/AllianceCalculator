@@ -1,38 +1,19 @@
-
-
 interface ResultCardProps {
   label: string;
-  value: number;
+  value: string;
   unit?: string;
-  highlight?: boolean;
+  detail?: string;
 }
 
-export function ResultCard({
-  label,
-  value,
-  unit = "",
-  highlight = false,
-}: ResultCardProps) {
+export function ResultCard({ label, value, unit, detail }: ResultCardProps) {
   return (
-    <div
-      className={`
-      p-4 rounded-lg shadow-md mb-4 transition-all duration-300
-      cursor-pointer 
-      ${highlight ? "bg-[#D3E97A] border-l-4 border-green-800" : "bg-white"}
-    `}
-    >
-      <h3 className="text-sm text-black mb-1 font-medium">{label}</h3>
-      <div className="flex items-end">
-        <span
-          className={`
-          text-2xl font-bold 
-          ${highlight ? "text-gold-800" : "text-gray-800"}
-        `}
-        >
-          {value.toFixed(2)}
-        </span>
-        {unit && <span className="ml-1 text-gray-600">{unit}</span>}
-      </div>
+    <div className="rounded-xl border border-gold-500/25 bg-gradient-to-br from-gold-500/15 to-gold-500/5 p-5">
+      <p className="text-sm font-medium text-gold-200">{label}</p>
+      <p className="mt-2 flex items-baseline gap-1.5">
+        <span className="text-4xl font-semibold tabular-nums text-ink-50">{value}</span>
+        {unit && <span className="text-lg text-ink-300">{unit}</span>}
+      </p>
+      {detail && <p className="mt-2 text-xs text-ink-400">{detail}</p>}
     </div>
   );
 }

@@ -1,10 +1,17 @@
 export function Footer() {
   return (
-    <footer className="mt-12 py-6  background-color-black;">
-      <div className="container mx-auto px-4 text-center text-gray-600 text-sm">
-        <p>&copy; {new Date().getFullYear()} Calculadora de Alianças</p>
-        <p className="mt-1">Desenvolvido por Samuel Muleu</p>
-      </div>
+    <footer className="py-8">
+      <p className="text-center text-sm text-ink-500">
+        &copy; {new Date().getFullYear()} Calculadora de Alianças · Desenvolvido por{" "}
+        <a
+          href="https://github.com/SamuelMuleu"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-ink-300 underline-offset-4 hover:text-gold-400 hover:underline"
+        >
+          Samuel Muleu
+        </a>
+      </p>
     </footer>
   );
 }
