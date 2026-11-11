@@ -1,109 +1,112 @@
-import { useState, useEffect } from "react";
-import {InputField} from "./InputField";
+import { useMemo, useState } from "react";
+import { TbRulerMeasure, TbRulerMeasure2, TbCircleDashed } from "react-icons/tb";
+import { InputField } from "./InputField";
 import { ResultsDisplay } from "./ResultsDisplay";
-import { RingMeasurements, CalculationResults } from "../types";
+import { RingMeasurements } from "../types";
 import { calculateResults } from "../utils/calculations";
-import { TbRulerMeasure, TbRulerMeasure2 } from "react-icons/tb";
 import { RING_SIZES_MAP } from "../utils/ringSizes";
 
+const EMPTY: RingMeasurements = { internalCircumference: 0, height: 0, width: 0 };
+
 export function RingForm() {
-  const [measurements, setMeasurements] = useState<RingMeasurements>({
-    internalCircumference: 0,
-    height: 0,
-    width: 0,
-  });
+  const [measurements, setMeasurements] = useState<RingMeasurements>(EMPTY);
+  const [ringSize, setRingSize] = useState("");
+  const [resetKey, setResetKey] = useState(0);
 
-    const [selectedRingSizeNumber, setSelectedRingSizeNumber] = useState<
-    number | ""
-  >("");
-
-  const [results, setResults] = useState<CalculationResults | null>(null);
-
-  // Recalculate when measurements change
-  useEffect(() => {
-    if (
-      measurements.internalCircumference > 0 &&
-      measurements.height > 0 &&
-      measurements.width > 0
-    ) {
-      setResults(calculateResults(measurements));
-    } else {
-      setResults(null);
-    }
+  const results = useMemo(() => {
+    const { internalCircumference, height, width } = measurements;
+    return internalCircumference > 0 && height > 0 && width > 0
+      ? calculateResults(measurements)
+      : null;
   }, [measurements]);
 
-  const handleInputChange = (field: keyof RingMeasurements, value: number) => {
-    setMeasurements((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+  const update = (field: keyof RingMeasurements, value: number) =>
+    setMeasurements((prev) => ({ ...prev, [field]: value }));
+
+  const handleRingSize = (value: string) => {
+    setRingSize(value);
+    update("internalCircumference", RING_SIZES_MAP[Number(value)] ?? 0);
   };
 
- const handleRingSizeSelect = (value: string) => {
-    const ringNumber = parseInt(value);
-    setSelectedRingSizeNumber(ringNumber);
-
-    if (!isNaN(ringNumber) && RING_SIZES_MAP[ringNumber]) {
-    
-      setMeasurements((prev) => ({
-        ...prev,
-        internalCircumference: RING_SIZES_MAP[ringNumber],
-      }));
-    } else {
-      
-      setMeasurements((prev) => ({
-        ...prev,
-        internalCircumference: 0,
-      }));
-      
-    }
+  const reset = () => {
+    setMeasurements(EMPTY);
+    setRingSize("");
+    setResetKey((k) => k + 1);
   };
+
+  const filled = ringSize !== "" || measurements.height > 0 || measurements.width > 0;
+
   return (
-    <div className="w-full max-w-md mx-auto">
-      <div className="bg-white rounded-xl shadow-lg p-6 mb-6 border border-gray-100">
-    
-
-      <div className="mb-4">
-          <label
-            htmlFor="ringSizeSelect"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Medida da Aliança
+    <div className="mx-auto w-full max-w-xl space-y-6">
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        className="space-y-5 rounded-2xl border border-ink-800 bg-ink-900/70 p-6 shadow-2xl shadow-black/40 backdrop-blur sm:p-8"
+      >
+        <div>
+          <label htmlFor="ringSize" className="mb-1.5 flex items-center gap-2 text-sm font-medium text-ink-100">
+            <TbCircleDashed className="text-gold-400" aria-hidden="true" />
+            Numeração da aliança
           </label>
           <select
-            id="ringSizeSelect"
-            value={selectedRingSizeNumber}
-            onChange={(e) => handleRingSizeSelect(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            id="ringSize"
+            value={ringSize}
+            onChange={(e) => handleRingSize(e.target.value)}
+            className="field cursor-pointer appearance-none bg-[length:1.25rem] bg-[right_1rem_center] bg-no-repeat"
+            style={{
+              backgroundImage:
+                "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239A958A' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E\")",
+            }}
           >
-            <option value="">Selecione a Medida</option>
-            {Object.keys(RING_SIZES_MAP).map((key) => (
-              <option key={key} value={key}>
-                {key}
+            <option value="">Selecione a numeração</option>
+            {Object.entries(RING_SIZES_MAP).map(([size, mm]) => (
+              <option key={size} value={size}>
+                Nº {size} · {mm.toLocaleString("pt-BR")} mm
               </option>
             ))}
           </select>
         </div>
-        <InputField
-          id="height"
-          label="Altura da Aliança"
-          value={measurements.height}
-          onChange={(value) => handleInputChange("height", value)}
-   
-          icon={<TbRulerMeasure2 />}
-        />
-        
 
-        <InputField
-          id="width"
-          label="Largura da Aliança"
-          value={measurements.width}
-          onChange={(value) => handleInputChange("width", value)}
-          icon={<TbRulerMeasure/>}
-        />
-      </div>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <InputField
+            key={`height-${resetKey}`}
+            id="height"
+            label="Altura (espessura)"
+            unit="mm"
+            max={10}
+            value={measurements.height}
+            onChange={(v) => update("height", v)}
+            icon={<TbRulerMeasure2 />}
+          />
+          <InputField
+            key={`width-${resetKey}`}
+            id="width"
+            label="Largura"
+            unit="mm"
+            max={20}
+            value={measurements.width}
+            onChange={(v) => update("width", v)}
+            icon={<TbRulerMeasure />}
+          />
+        </div>
 
-      {results && <ResultsDisplay results={results} />}
+        {filled && (
+          <button
+            type="button"
+            onClick={reset}
+            className="text-sm font-medium text-ink-300 underline-offset-4 hover:text-gold-400 hover:underline"
+          >
+            Limpar campos
+          </button>
+        )}
+      </form>
+
+      {results ? (
+        <ResultsDisplay results={results} />
+      ) : (
+        <p className="rounded-xl border border-dashed border-ink-700 p-5 text-center text-sm text-ink-400">
+          Preencha a numeração, a altura e a largura para ver a conquilha e o peso.
+        </p>
+      )}
     </div>
   );
 }

@@ -1,41 +1,29 @@
+import { motion } from "framer-motion";
 import { ResultCard } from "./ResultCard";
 import { CalculationResults } from "../types";
-import { motion } from "framer-motion";
 
-interface ResultsDisplayProps {
-  results: CalculationResults;
-}
+const fmt = (n: number) =>
+  n.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-export function ResultsDisplay({ results }: ResultsDisplayProps) {
-  const { suggestedConquilha, weight } = results;
+export function ResultsDisplay({ results }: { results: CalculationResults }) {
+  const { suggestedConquilha, conquilhaValue, weight } = results;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
+    <motion.section
+      aria-live="polite"
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
-      className="seu-estilo-aqui"
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="grid grid-cols-1 gap-4 sm:grid-cols-2"
     >
-      <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4 flex justify-center p-2">
-          Resultados do Cálculo
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <ResultCard
-            label="Conquilha Sugerida"
-            value={suggestedConquilha}
-            highlight={true}
-          />
-
-          <ResultCard
-            label="Peso Necessário"
-            value={weight}
-            unit="g"
-            highlight={true}
-          />
-        </div>
-      </div>
-    </motion.div>
+      <h2 className="sr-only">Resultados do cálculo</h2>
+      <ResultCard
+        label="Conquilha sugerida"
+        value={fmt(suggestedConquilha)}
+        unit="mm"
+        detail={`Valor calculado: ${fmt(conquilhaValue)} mm`}
+      />
+      <ResultCard label="Peso necessário" value={fmt(weight)} unit="g" detail="Peso estimado para a fundição" />
+    </motion.section>
   );
 }

@@ -4,15 +4,11 @@ import { Footer } from "./components/Footer";
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Header />
-
-      <main className="flex-grow container mx-auto px-4 py-6">
-        <div className="max-w-3xl mx-auto">
-          <RingForm />
-        </div>
+      <main className="flex-grow px-4 pb-8">
+        <RingForm />
       </main>
-
       <Footer />
     </div>
   );

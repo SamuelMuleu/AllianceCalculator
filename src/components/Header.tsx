@@ -2,18 +2,18 @@ import { GiGoldBar } from "react-icons/gi";
 
 export function Header() {
   return (
-    <header className=" text-white py-6 mb-8">
-      <div className="container mx-auto px-4  flex justify-center items-center">
-        <div className="flex items-center justify-center md:justify-start">
-          <div className=" mr-3 flex justify-center items-center  text-gold-400">
-            <GiGoldBar size={50} />
-          </div>
-          <div>
-            <h1 className="text-2xl font-semibold  ml-4">Calculadora de Alianças</h1>
-            <p className="text-sm ml-2 text-gold-100">
-              Calcule o peso necessário e tamanho da conquilha
-            </p>
-          </div>
+    <header className="pt-10 pb-8 sm:pt-14">
+      <div className="mx-auto flex max-w-xl flex-col items-center gap-4 px-4 text-center">
+        <span className="flex h-14 w-14 items-center justify-center rounded-2xl border border-gold-500/30 bg-gold-500/10 text-gold-400">
+          <GiGoldBar size={30} aria-hidden="true" />
+        </span>
+        <div>
+          <h1 className="font-serif text-3xl text-ink-50 sm:text-4xl">
+            Calculadora de Alianças
+          </h1>
+          <p className="mt-2 text-ink-300">
+            Descubra a conquilha ideal e o peso de ouro necessário para a fundição.
+          </p>
         </div>
       </div>
     </header>
